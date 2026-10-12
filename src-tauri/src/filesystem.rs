@@ -840,7 +840,7 @@ pub mod lua_filesystem {
                     let ziploader = globals.get::<_, Table>("ZipLoader")?;
                     let ctor = ziploader.get::<_, Function>("_ctor")?;
                     let filter = ziploader.get::<_, Table>("NAME_FILTER")?.get::<_, Function>("ALL")?;
-                    loader.set("is_dyn", true)?;
+                    // loader.set("is_dyn", true)?;
                     ctor.call::<_, Value>((loader, fs, filter))?;
                 }
                 else {
@@ -875,26 +875,10 @@ pub mod lua_filesystem {
         Ok(())
     }
 
-    // dyn loader (secret vars is defined in env)
-    const DYN_INDEX: Option<&'static str> = option_env!("DYN_INDEX"); // some string
-    const DYN_MAGIC_NUMBER: Option<&'static str> = option_env!("DYN_MAGIC_NUMBER"); // some string
-
     fn read_dyn(mut bytes: Vec<u8>) -> Option<ReadStream> {
-        // skip this feature if magic number not provided
-        // compiler can work though
-        let dyn_index_s = DYN_INDEX.unwrap_or("");
-        let dyn_magic_number_s = DYN_MAGIC_NUMBER.unwrap_or("");
-        if dyn_index_s.is_empty() || dyn_magic_number_s.is_empty() {
-            return None;
-        }
-        // parse
-        // need a exact correct value to run properly (defined in env or github action)
-        // if you don't know the value, leave `DYN_INDEX` and `DYN_MAGIC_NUMBER` empty
-        let dyn_index = dyn_index_s.chars()
-            .map(|i|i.to_string().parse::<u8>().unwrap() as usize)
-            .collect::<Vec<usize>>();
-        let dyn_magic_number = dyn_magic_number_s.to_string().parse::<u8>().unwrap();
-        let chunk_size = dyn_index_s.len();
+        let dyn_index = vec![6, 7, 5, 1, 4, 0, 2, 3];
+        let dyn_magic_number = 141_u8;
+        let chunk_size = 8;
 
         let len = bytes.len();
         let len_aligned = if len % chunk_size == 0 { len } else { (len / chunk_size + 1) * chunk_size };

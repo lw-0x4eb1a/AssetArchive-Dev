@@ -4,6 +4,32 @@ pub mod lua_misc {
     use std::time::{SystemTime, UNIX_EPOCH};
     use indicatif::{ProgressBar, ProgressStyle};
     use webbrowser;
+    use clipboard_rs::{common::RustImage, Clipboard, ClipboardContext, RustImageData};
+    use image::ImageEncoder;
+    use once_cell::sync::OnceCell;
+
+    static CLIPBOARD: OnceCell<ClipboardContext> = OnceCell::new();
+
+    fn write_clipboard_image(width: u32, height: u32, bytes: &[u8]) -> LuaResult<bool> {
+        let result = (|| -> clipboard_rs::Result<()> {
+            let expected_len = (width as usize)
+                .checked_mul(height as usize)
+                .and_then(|len| len.checked_mul(4));
+            if width == 0 || height == 0 || expected_len != Some(bytes.len()) {
+                return Err("Invalid RGBA image dimensions or byte length".into());
+            }
+
+            // PNG bridges the different image crate versions used here and by clipboard-rs.
+            let mut png = Vec::new();
+            image::codecs::png::PngEncoder::new(&mut png)
+                .write_image(bytes, width, height, image::ColorType::Rgba8)?;
+            let image = RustImageData::from_bytes(&png)?;
+            CLIPBOARD.get_or_try_init(ClipboardContext::new)?.set_image(image)
+        })();
+        result.map(|()| true).map_err(|e| {
+            LuaError::RuntimeError(format!("Failed to write image to clipboard: {:?}", e))
+        })
+    }
     
     struct Bar {
         inner: ProgressBar,
@@ -73,11 +99,7 @@ pub mod lua_misc {
             match img {
                 Value::UserData(v)=> {
                     if let Ok(v) = v.borrow::<Image>() {
-                        let mut clipboard = clippers::Clipboard::get();
-                        match clipboard.write_image(v.width, v.height, v.as_bytes()) {
-                            Ok(())=> Ok(true),
-                            Err(e)=> Err(LuaError::RuntimeError(format!("Failed to write image to clipboard: {:?}", e)))
-                        }
+                        write_clipboard_image(v.width, v.height, v.as_bytes())
                     }
                     else {
                         Err(LuaError::RuntimeError("Type is not image".to_string()))
@@ -87,15 +109,12 @@ pub mod lua_misc {
             }
         })?)?;
         clipboard.set("WriteImage_Bytes", lua_ctx.create_function(|_, (bytes, width, height): (LuaString, u32, u32)|{
-            let mut clipboard = clippers::Clipboard::get();
-            match clipboard.write_image(width, height, bytes.as_bytes()) {
-                Ok(())=> Ok(true),
-                Err(e)=> Err(LuaError::RuntimeError(format!("Failed to write image to clipboard: {:?}", e)))
-            }
+            write_clipboard_image(width, height, bytes.as_bytes())
         })?)?;
         clipboard.set("WriteText", lua_ctx.create_function(|_, text: String|{
-            let mut clipboard = clippers::Clipboard::get();
-            match clipboard.write_text(&text) {
+            let result = CLIPBOARD.get_or_try_init(ClipboardContext::new)
+                .and_then(|clipboard| clipboard.set_text(text));
+            match result {
                 Ok(())=> Ok(true),
                 Err(e)=> Err(LuaError::RuntimeError(format!("Failed to write string to clipboard: {:?}", e)))
             }
