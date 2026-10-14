@@ -29,15 +29,9 @@
   },
   "productName": "Asset Archive",
   "mainBinaryName": "Asset Archive",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "identifier": "com.dont-starve-asset-archive.dev",
   "plugins": {
-    "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDc5NTQ3NzUxOEE4QkQwQzMKUldURDBJdUtVWGRVZVdlRzdleC9Na0ZObytVOFhKcU5rM0NjSGpzdThiYTkzeC92bHViYTRlbjIK",
-      "endpoints": [
-        "https://asset-archive-page-dont-starve3-88a0c46a24df5a45ae1a89244d0837e.gitlab.io/manifest/"
-      ]
-    }
   },
   "app": {
     "withGlobalTauri": false,
