@@ -28,7 +28,7 @@ export default function About() {
         <Icon icon="share" size={12} className="align-middle ml-1" />
       </a>
       <SimpleLink className="ml-5" url="https://archive.lwdocs.cn">网站首页</SimpleLink>
-      <SimpleLink className="ml-5" url="https://github.com/lw-0x4eb1a/AssetArchive-Dev.git">源代码</SimpleLink>
+      <SimpleLink className="ml-5" url="https://github.com/lw-0x4eb1a/AssetArchive-Dev">源代码</SimpleLink>
       <H5>使用声明</H5>
       <p>本软件仅提供对饥荒游戏资源文件的读取和导出功能，软件本体不携带游戏资源文件，您在使用前应先在设备上安装正版饥荒游戏，并确保游戏文件的完整性。
         因安装盗版游戏或修改游戏资源导致软件运行的任何问题，本软件概不负责。
