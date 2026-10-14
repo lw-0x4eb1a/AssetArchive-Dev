@@ -27,7 +27,7 @@ walkdir = "2.3.3"
 indicatif = "0.17.3"
 filenamify = "0.1.0"
 zip = { version = "^2.6.1", default-features = false, features = ["bzip2", "deflate", "lzma", "time"] }
-zune-inflate= { version="0.2.54",default-features=false,features= ["zlib"] }
+zune-inflate= { version="0.2.54",default-features=false,features= ["zlib", "gzip"] }
 bcndecode = "0.2.0"
 num-traits = "0.2.15"
 serde = { version = "1.0", features = ["derive"] }
@@ -60,6 +60,7 @@ clipboard-rs = "0.3.5"
 
 [target.'cfg(target_os = "macos")'.dependencies]
 coreaudio-rs = { version = "0.11", default-features = false, features = ["audio_unit", "core_audio"] }
+tar = { version = "0.4", default-features = false }
 
 [target.'cfg(target_os = "windows")'.dependencies]
 cpal = "0.15"

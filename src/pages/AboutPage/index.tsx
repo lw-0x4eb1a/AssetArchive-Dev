@@ -23,11 +23,12 @@ export default function About() {
         </Tag>
       </H3>
       <p>一站式饥荒游戏资源检索工具——只需轻点几下，即可快速导出图片、动画、音效、滤镜等游戏资源。</p>
-      <SimpleLink url="https://archive.lwdocs.cn">网站首页</SimpleLink>
-      <a className="ml-5" onClick={()=> openChangeLog()}>
+      <a className="ml-0" onClick={()=> openChangeLog()}>
         更新日志
         <Icon icon="share" size={12} className="align-middle ml-1" />
       </a>
+      <SimpleLink className="ml-5" url="https://archive.lwdocs.cn">网站首页</SimpleLink>
+      <SimpleLink className="ml-5" url="https://github.com/lw-0x4eb1a/AssetArchive-Dev.git">源代码</SimpleLink>
       <H5>使用声明</H5>
       <p>本软件仅提供对饥荒游戏资源文件的读取和导出功能，软件本体不携带游戏资源文件，您在使用前应先在设备上安装正版饥荒游戏，并确保游戏文件的完整性。
         因安装盗版游戏或修改游戏资源导致软件运行的任何问题，本软件概不负责。
@@ -64,17 +65,17 @@ export default function About() {
         <SimpleLink url="https://steamcommunity.com/sharedfiles/filedetails/?id=2910584141">dsanimtool</SimpleLink>
         （Spine到饥荒动画转换器）
       </p>
-      <p>
+      {/*<p>
         <SimpleLink url="https://dst-modding-toolbox-web-52a862.gitlab.io">在线饥荒模组工具箱</SimpleLink>
-      </p>
+      </p>*/}
       {/* <p>B站关注<a onClick={()=> open("https://space.bilibili.com/209631439")}>@老王天天写bug</a>，获取最新更新动态。</p> */}
     </div>
   )
 }
 
-function SimpleLink(props: {children: string, url: string}) {
+function SimpleLink(props: {children: string, url: string, className: string}) {
   return (
-    <a href="#" onClick={()=> openURL(props.url)}>
+    <a href="#" onClick={()=> openURL(props.url)} className={props.className}>
       {props.children} 
       <Icon icon="share" size={12} className="align-middle ml-1" />
     </a>

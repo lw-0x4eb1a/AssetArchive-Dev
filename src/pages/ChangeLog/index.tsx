@@ -12,6 +12,11 @@ function Img(props: {src: string}) {
 export default function ChangeLog() {
   return (
     <div className="p-5 bp4-running-text overflow-scroll" style={{maxHeight: "100vh"}}>
+      <H5>beta - 0.1.8</H5>
+      <UL>
+        <li>现在程序会自带视频编码器，无需单独下载。</li>
+        <li>移除了对于dyn资源的下载限制。</li>
+      </UL>
       <H5>beta - 0.1.7</H5>
       <UL>
         <li>现在可以在软件内直接打开DST Mod Tool编辑资源（需在设置页面启用）。</li>

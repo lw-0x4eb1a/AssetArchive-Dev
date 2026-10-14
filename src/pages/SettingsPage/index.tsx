@@ -118,7 +118,7 @@ export default function SettingsPage() {
     >
       <Radio label='50' value={50}/>
       <Radio label="100" value={100}/>
-      <Radio label="200" value={1000}/>
+      <Radio label="200" value={200}/>
       <Radio labelElement={<Tooltip2 content={"展示太多搜索结果会导致卡顿，请谨慎开启"} placement="right">
         <>500 <Icon icon="small-info-sign"/></></Tooltip2>} value={500}/>
     </RadioGroup>
@@ -180,16 +180,12 @@ export default function SettingsPage() {
         className="ml-1"
         intent={ffmpegState.checking ? "none" : installed ? "success" : "warning"}>
         {
-          ffmpegState.checking ? "检查中..." : installed ? "已安装" : "未安装"
+          ffmpegState.checking ? "检查中..." : ffmpegState.custom_installed ? "自定义路径" : installed ? "内置版本" : "不可用"
         }
       </Tag>
     </H4>
-    <p>FFmpeg是一个开源的多媒体编解码程序，饥荒资源档案的部分功能（例如动画导出）需要依赖FFmpeg。</p>
-    <Button icon="download" onClick={()=> openInstaller()}>
-      {
-        (ffmpegState.checking || installed) ? "配置" : "安装"
-      }
-    </Button>
+    <p>FFmpeg用于动画导出，程序已自带。如需设置自定义可执行路径，请在此配置。</p>
+    <Button icon="cog" onClick={()=> openInstaller()}>配置</Button>
     <hr/>
     <H4>快速预览</H4>
     <p>当文件改变时，刷新视图：</p>

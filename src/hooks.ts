@@ -120,7 +120,6 @@ type rLuaAPI =
   "animproject.init" | "animproject" | 
   "set" |
   "ffmpeg_install" |
-  "ffmpeg_uninstall" |
   "ffmpeg_custom_install" |
   "ffmpeg_getstate" |
   "render_animation_sync" | 

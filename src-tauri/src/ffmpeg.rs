@@ -8,6 +8,10 @@ use once_cell::sync::Lazy;
 
 use crate::CommandExt;
 
+mod bundled;
+#[cfg(test)]
+mod tests;
+
 #[derive(Debug)]
 struct DownloadState {
     id: String,
@@ -179,6 +183,13 @@ pub mod lua_ffmpeg {
     pub fn init(lua_ctx: LuaContext) -> LuaResult<()> {
         
     let table = lua_ctx.create_table()?;
+
+    table.set("InstallBundled", lua_ctx.create_function(|lua, ()| {
+        let bin_dir: crate::filesystem::lua_filesystem::Path = lua.globals().get("APP_BIN_DIR")?;
+        bundled::unpack(&bin_dir.get_inner())
+            .map(|path| path.to_string_lossy().into_owned())
+            .map_err(LuaError::RuntimeError)
+    })?)?;
 
     // create a new lua ffmpeg encoder
     //   bin      /usr/local/bin/ffmpeg

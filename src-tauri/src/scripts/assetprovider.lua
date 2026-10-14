@@ -898,8 +898,8 @@ function Provider:LoadAtlas(name) --> atlaslist
 			zip = ZipLoader2.WrapBytes(fs:read_to_end())
 		elseif sig == DYN_SIG then
 			zip = DynLoader(fs)
-			zip.is_dyn = true
-			build.is_dyn = true
+			-- zip.is_dyn = true
+			-- build.is_dyn = true
 		else
 			print("Warning: LoadAtlas: invalid file sig")
 			return

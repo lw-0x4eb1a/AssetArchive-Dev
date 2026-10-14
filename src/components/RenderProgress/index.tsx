@@ -118,8 +118,8 @@ export default function RenderProgress(props: {isMain?: boolean}) {
                 <div style={{marginTop: 10}}>
                   {
                     error.toLowerCase().indexOf("ffmpeg") !== -1 &&
-                    <p>要导出gif/mp4/mov格式，必须先安装FFmpeg。
-                      <b><a onClick={()=> openInstaller()}>去安装..</a></b>
+                    <p>FFmpeg不可用，请检查视频编码器配置。
+                      <b><a onClick={()=> openInstaller()}>去配置...</a></b>
                     </p>
                   }
                   {

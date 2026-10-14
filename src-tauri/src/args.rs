@@ -169,20 +169,14 @@ pub mod lua_args {
                     .after_help("颜色参数:\n  css格式的颜色值, 例如: red, #f00, rgb(255,255,0), rgba(255,255,0,100), transparent")
                 )
                 .subcommand(clap::Command::new("install-ffmpeg")
-                    .about("安装FFmpeg")
+                    .about("配置FFmpeg（默认使用内置版本）")
                     .visible_aliases(["ffmpeg"])
                     .args([
                         generic_args[0].clone(),
-                        Arg::new("uninstall")
-                            .long("uninstall")
-                            .short('u')
-                            .action(ArgAction::SetTrue)
-                            .help("卸载已安装的FFmpeg"),
                         Arg::new("path")
                             .long("path")
                             .value_name("PATH")
-                            .help("使用自定义安装, 需要有效的可执行文件路径, 例如: ffmpeg, path/to/ffmpeg.exe, /usr/local/bin/ffmpeg")
-                            .conflicts_with("uninstall"),
+                            .help("优先使用自定义可执行路径, 例如: ffmpeg, path/to/ffmpeg.exe, /usr/local/bin/ffmpeg; 传入空字符串恢复内置版本"),
                 ]))
                 .after_help("");
             let matches = cmd.get_matches();
