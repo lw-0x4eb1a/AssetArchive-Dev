@@ -60,7 +60,12 @@ jobs:
           $vcvars = Join-Path $vsPath 'VC\Auxiliary\Build\vcvars64.bat'
           if (-not (Test-Path $vcvars)) { throw "vcvars64.bat not found at $vcvars" }
           cmd /c "`"$vcvars`" && set" | ForEach-Object {
-            if ($_ -match '^([^=]+)=(.*)$') { Add-Content -Path $env:GITHUB_ENV -Value "$($matches[1])=$($matches[2])" }
+            if ($_ -match '^([^=]+)=(.*)$') {
+              $name = $matches[1]
+              $value = $matches[2]
+              Set-Item -Path "Env:$name" -Value $value
+              Add-Content -Path $env:GITHUB_ENV -Value "$name=$value"
+            }
           }
           # Fail early (and legibly) if the MSVC toolchain still cannot be located.
           if (-not $env:VCToolsInstallDir) { throw 'VCToolsInstallDir is not set after running vcvars64.bat' }
