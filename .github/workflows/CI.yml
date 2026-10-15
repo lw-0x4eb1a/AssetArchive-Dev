@@ -46,6 +46,25 @@ jobs:
           node-version: lts/*
           cache: 'npm' # Set this to npm, yarn or pnpm.
 
+      - name: setup MSVC developer environment (windows only)
+        if: matrix.platform == 'windows-latest'
+        shell: pwsh
+        run: |
+          $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
+          if (-not (Test-Path $vswhere)) { throw "vswhere.exe not found at $vswhere" }
+          $vsPath = & $vswhere -latest -products * `
+            -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
+            -property installationPath
+          if (-not $vsPath) { throw 'no Visual Studio installation with the x64 C++ toolset found' }
+          Write-Host "Using Visual Studio at: $vsPath"
+          $vcvars = Join-Path $vsPath 'VC\Auxiliary\Build\vcvars64.bat'
+          if (-not (Test-Path $vcvars)) { throw "vcvars64.bat not found at $vcvars" }
+          cmd /c "`"$vcvars`" && set" | ForEach-Object {
+            if ($_ -match '^([^=]+)=(.*)$') { Add-Content -Path $env:GITHUB_ENV -Value "$($matches[1])=$($matches[2])" }
+          }
+          # Fail early (and legibly) if the MSVC toolchain still cannot be located.
+          if (-not $env:VCToolsInstallDir) { throw 'VCToolsInstallDir is not set after running vcvars64.bat' }
+
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable # Set this to dtolnay/rust-toolchain@nightly
         with:
