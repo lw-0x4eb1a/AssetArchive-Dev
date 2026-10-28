@@ -16,6 +16,7 @@ export default function ChangeLog() {
       <UL>
         <li>现在程序会自带视频编码器，无需单独下载。</li>
         <li>移除了对于dyn资源的下载限制。</li>
+        <li>修复游戏目录被删除或移动后，软件启动时卡死的bug。</li>
       </UL>
       <H5>beta - 0.1.7</H5>
       <UL>
