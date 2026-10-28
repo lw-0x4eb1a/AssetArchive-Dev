@@ -86,6 +86,9 @@ function DST_DataRoot:SetRoot(path, explicit)
 	if type(path) == "string" then
 		path = FileSystem.Path(path)
 	end
+	if not path:exists() then
+		return false
+	end
 	local path = self:ResolvePath(path)
 	if path == nil then
 		return false
